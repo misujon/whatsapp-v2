@@ -34,15 +34,17 @@ const MessageElement = styled.p`
     padding-bottom: 26px;
     position: relative;
     text-align: right;
+    color: whitesmoke;
+    box-shadow: 0px 0px 10px -3px #000;
 `;
 
 const Sender = styled(MessageElement)`
     margin-left: auto;
-    background-color: #dcf8c6;
+    background-color: #056162;
 `;
 
 const Receiver = styled(MessageElement)`
-    background-color: whitesmoke;
+    background-color: #262D31;
     text-align: left;
 `;
 

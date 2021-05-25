@@ -20,8 +20,10 @@ function Chat({ id, users }) {
         router.push(`/chat/${id}`);
     }
 
+    const ShowActiveChatUser = id == router.query.id ? ActiveUser : Container;
+
     return (
-        <Container onClick={enterChat}>
+        <ShowActiveChatUser onClick={enterChat}>
             {
                 recipient ? (
                     <UserAvatar src={recipient?.photoUrl} />
@@ -42,7 +44,7 @@ function Chat({ id, users }) {
                     </p>
                 )
             }
-        </Container>
+        </ShowActiveChatUser>
     )
 }
 
@@ -54,13 +56,19 @@ const Container = styled.div`
     cursor: pointer;
     padding: 5px;
     word-break: break-word;
+    color: whitesmoke;
+    text-align: left;
 
     :hover {
-        background-color: #e9eaeb;
+        background-color: #323739;
     }
 `;
 
 const UserAvatar = styled(Avatar)`
     margin: 5px;
     margin-right: 15px;
+`;
+
+const ActiveUser = styled(Container)`
+    background-color: #323739;
 `;

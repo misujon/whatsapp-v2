@@ -8,6 +8,8 @@ import { useCollection } from 'react-firebase-hooks/firestore';
 import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Chat from '../components/Chat';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function Sidebar() {
 
@@ -40,25 +42,37 @@ function Sidebar() {
     return (
         <Container>
             <Header>
-                <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
+                <UserAvatar src={user.photoURL} />
                 
                 <IconsContainer>
-                    <IconButton>
-                        <ChatIcon />
-                    </IconButton>
+                    <Tooltip title="New Chat">
+                        <CustomIconButton>
+                            <ChatIcon />
+                        </CustomIconButton>
+                    </Tooltip>
 
-                    <IconButton>
-                        <MoreVertIcon />
-                    </IconButton>
+                    <Tooltip title="Options">
+                        <CustomIconButton>
+                            <MoreVertIcon />
+                        </CustomIconButton>
+                    </Tooltip>
+
+                    <Tooltip title="Logout">
+                        <CustomIconButton onClick={() => auth.signOut()}>
+                            <ExitToAppIcon />
+                        </CustomIconButton>
+                    </Tooltip>
                 </IconsContainer>
             </Header>
 
             <Search>
-                <SearchIcon />
+                <CustomSearchIconButton />
                 <SearchInput placeholder="Search in chats" />
             </Search>
 
-            <SidebarButton onClick={createChat}>Start a New Chat</SidebarButton>
+            <SidebarButtonContainer>
+                <SidebarButton onClick={createChat}>Start a New Chat</SidebarButton>
+            </SidebarButtonContainer>
 
 
             {/* List of Chats */}
@@ -75,7 +89,6 @@ export default Sidebar;
 
 const Container = styled.div`
     flex: 0.45;
-    border-right: 1px solid whitesmoke;
     height: 100vh;
     min-width: 300px;
     max-width: 350px;
@@ -87,27 +100,36 @@ const Container = styled.div`
 
     -ms-overflow-style: none;
     scrollbar-width: none;
+    background-color: #131C21;
 `;
 
 const Search = styled.div`
     display: flex;
     align-items: center;
-    padding: 20px;
-    border-radius: 2px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: #17393a;
 `;
 
 const SearchInput = styled.input`
     outline-width: 0;
     border: none;
     flex: 1;
+    background: #17393a;
+    color: #fff;
+`;
+
+const SidebarButtonContainer = styled.div`
+    text-align: center;
 `;
 
 const SidebarButton = styled(Button)`
-    width: 100%;
+    width: 80%;
 
     &&& {
-        border-top: 1px solid whitesmoke;
-        border-bottom: 1px solid whitesmoke;
+        border: 1px solid #39b926;
+        color: white;
     }
 `;
 
@@ -115,13 +137,12 @@ const Header = styled.div`
     display: flex;
     position: sticky;
     top: 0;
-    background-color: #fff;
+    background-color: #131C21;
     z-index: 1;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
     height: 80px;
-    border-bottom: 1px solid whitesmoke;
 `;
 
 const UserAvatar = styled(Avatar)`
@@ -134,3 +155,14 @@ const UserAvatar = styled(Avatar)`
 
 const IconsContainer = styled.div``;
 
+const CustomIconButton = styled(IconButton)`
+    &&& {
+        color: whitesmoke;
+    }
+`;
+
+const CustomSearchIconButton = styled(SearchIcon)`
+    &&& {
+        color: whitesmoke;
+    }
+`;

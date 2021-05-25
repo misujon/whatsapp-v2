@@ -17,7 +17,7 @@ function Login() {
 
             <LoginContainer>
                 <Logo src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c543.png" />
-                <Button variant="outlined" onClick={signIn}>Sign in with Google</Button>
+                <CustomButton variant="outlined" onClick={signIn}>Sign in with Google</CustomButton>
             </LoginContainer>
         </Container>
     )
@@ -29,7 +29,10 @@ const Container = styled.div`
     display: grid;
     place-items: center;
     height: 100vh;
-    background-color: whitesmoke;
+    background-image: url('/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
 `;
 
 const LoginContainer = styled.div`
@@ -37,7 +40,7 @@ const LoginContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
+    background-color: #17393a;
     border-radius: 5px;
     box-shadow: 0px 4px 14px -3px rgba(0, 0, 0, 0.7);
 `;
@@ -46,4 +49,11 @@ const Logo = styled.img`
     height: 200px;
     width: 200px;
     margin-bottom: 50px;
+`;
+
+const CustomButton = styled(Button)`
+    &&& {
+        border: 1px solid #39b926;
+        color: white;
+    }
 `;

@@ -125,13 +125,13 @@ function ChatScreen({ chat, messages }) {
                 </HeaderInformations>
 
                 <HeaderIcon>
-                    <IconButton>
+                    <CustomIconButton>
                         <AttachFileIcon />
-                    </IconButton>
+                    </CustomIconButton>
 
-                    <IconButton>
+                    <CustomIconButton>
                         <MoreVertIcon />
-                    </IconButton>
+                    </CustomIconButton>
                 </HeaderIcon>
             </Header>
 
@@ -143,10 +143,10 @@ function ChatScreen({ chat, messages }) {
 
             
             <InputContainer>
-                <InsertEmoticonIcon />
+                <CustomInsertEmoticonIcon />
                 <Input value={input} onChange={e => setInput(e.target.value)} />
                 <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>
-                <MicIcon />
+                <CustomMicIcon />
             </InputContainer>
             
         </Container>
@@ -155,18 +155,23 @@ function ChatScreen({ chat, messages }) {
 
 export default ChatScreen;
 
-const Container = styled.div``;
+const Container = styled.div`
+    background-image: url('/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+`;
 
 const Header = styled.div`
     position: sticky;
-    background-color: white;
+    background-color: #17393a;
     z-index: 100;
     top: 0;
     display: flex;
     padding: 11px;
     height: 80px;
     align-items: center;
-    border-bottom: 1px solid whitesmoke;
 `;
 
 const HeaderInformations = styled.div`
@@ -177,6 +182,7 @@ const HeaderInformations = styled.div`
     >h3 {
         margin-bottom: 3px;
         margin-top: 0;
+        color: whitesmoke;
     }
 
     >p {
@@ -194,17 +200,25 @@ const EndOfMessage = styled.div`
 
 const MessageContainer = styled.div`
     padding: 30px;
-    background-color: #e5ded8;
-    min-height: 90vh;
+    overflow-y: scroll;
+    height: 90vh;
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    --ms-overflow-style: none;
+    scrollbar-width: none;
 `;
 
 const Input = styled.input`
     flex: 1;
     outline: 0;
     border: none;
-    border-radius: 10px;
-    background-color: whitesmoke;
-    padding: 20px;
+    border-radius: 100px;
+    background-color: #3f4446;
+    color: whitesmoke;
+    padding: 15px 20px;
     margin-left: 15px;
     margin-right: 15px;
 `;
@@ -215,6 +229,24 @@ const InputContainer = styled.form`
     padding: 10px;
     position: sticky;
     bottom: 0;
-    background-color: white;
+    background-color: #17393a;
     z-index: 100;
+`;
+
+const CustomIconButton = styled(IconButton)`
+    &&& {
+        color: whitesmoke;
+    }
+`;
+
+const CustomInsertEmoticonIcon = styled(InsertEmoticonIcon)`
+    &&& {
+        color: whitesmoke;
+    }
+`;
+
+const CustomMicIcon = styled(MicIcon)`
+    &&& {
+        color: whitesmoke;
+    }
 `;
