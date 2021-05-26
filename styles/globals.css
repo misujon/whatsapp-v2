@@ -18,3 +18,9 @@ a {
 span.loaderIcon > div {
   margin: auto;
 }
+
+section.emoji-mart.emoji-mart-light {
+  position: absolute;
+  left: 10px;
+  bottom: 65px;
+}

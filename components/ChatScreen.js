@@ -14,6 +14,10 @@ import Message from './Message';
 import getRecipientEmail from '../utils/getRecipientEmail';
 import TimeAgo from 'timeago-react';
 
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
+
+
 function ChatScreen({ chat, messages }) {
 
     const [input, setInput] = useState("");
@@ -29,35 +33,41 @@ function ChatScreen({ chat, messages }) {
         .orderBy('timestamp', 'asc')
     );
 
-
-
     const scrollToBottom = () => {
-        endOfMessageRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
+        if (endOfMessageRef && endOfMessageRef.current) {
+            endOfMessageRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     }
 
     const showMessages = () => {
         if (messagesSnapshot) {
-            return messagesSnapshot.docs.map((message) => (
-                <Message
-                    key={message.id}
-                    user={message.data().user}
-                    message={{
-                        ...message.data(),
-                        timestamp: message.data().timestamp?.toDate().getTime(),
-                    }}
-                />
-            ))
+            return [
+                messagesSnapshot.docs.map((message) => (
+                    <Message
+                        key={message.id}
+                        user={message.data().user}
+                        message={{
+                            ...message.data(),
+                            timestamp: message.data().timestamp?.toDate().getTime(),
+                        }}
+                    />
+                )),
+                scrollToBottom()
+            ]
         } else {
-            return JSON.parse(messages).map((message) => (
-                <Message
-                    key={message.id}
-                    user={message.user}
-                    message={message}
-                />
-            ))
+            return [
+                JSON.parse(messages).map((message) => (
+                    <Message
+                        key={message.id}
+                        user={message.user}
+                        message={message}
+                    />
+                )),
+                scrollToBottom()
+            ]
         }
     }
 
@@ -90,6 +100,20 @@ function ChatScreen({ chat, messages }) {
     const recipient = recipientSnapshot?.docs?.[0]?.data();
     const recipientEmail = getRecipientEmail(chat.users, user);
 
+    const [emojiInput, setemojiInput] = useState(false);
+
+    const CheckEmojiInput = () => {
+        if (!emojiInput) {
+            return setemojiInput(true);
+        } else {
+            return setemojiInput(false);
+        }
+    }
+
+    const addEmojiToInput = (e) => {
+        return setInput(input + e.native);
+    }
+    
 
     return (
         <Container>
@@ -143,7 +167,8 @@ function ChatScreen({ chat, messages }) {
 
             
             <InputContainer>
-                <CustomInsertEmoticonIcon />
+                {emojiInput?<Picker onSelect={addEmojiToInput} />:''}
+                <CustomInsertEmoticonIcon onClick={CheckEmojiInput} />
                 <Input value={input} onChange={e => setInput(e.target.value)} />
                 <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>
                 <CustomMicIcon />
@@ -240,6 +265,7 @@ const CustomIconButton = styled(IconButton)`
 `;
 
 const CustomInsertEmoticonIcon = styled(InsertEmoticonIcon)`
+    cursor: pointer;
     &&& {
         color: whitesmoke;
     }

@@ -36,6 +36,7 @@ const MessageElement = styled.p`
     text-align: right;
     color: whitesmoke;
     box-shadow: 0px 0px 10px -3px #000;
+    max-width: 90%;
 `;
 
 const Sender = styled(MessageElement)`

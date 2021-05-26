@@ -46,7 +46,7 @@ function Sidebar() {
                 
                 <IconsContainer>
                     <Tooltip title="New Chat">
-                        <CustomIconButton>
+                        <CustomIconButton onClick={createChat}>
                             <ChatIcon />
                         </CustomIconButton>
                     </Tooltip>
@@ -69,10 +69,6 @@ function Sidebar() {
                 <CustomSearchIconButton />
                 <SearchInput placeholder="Search in chats" />
             </Search>
-
-            <SidebarButtonContainer>
-                <SidebarButton onClick={createChat}>Start a New Chat</SidebarButton>
-            </SidebarButtonContainer>
 
 
             {/* List of Chats */}
@@ -120,18 +116,18 @@ const SearchInput = styled.input`
     color: #fff;
 `;
 
-const SidebarButtonContainer = styled.div`
-    text-align: center;
-`;
+// const SidebarButtonContainer = styled.div`
+//     text-align: center;
+// `;
 
-const SidebarButton = styled(Button)`
-    width: 80%;
+// const SidebarButton = styled(Button)`
+//     width: 80%;
 
-    &&& {
-        border: 1px solid #39b926;
-        color: white;
-    }
-`;
+//     &&& {
+//         border: 1px solid #39b926;
+//         color: white;
+//     }
+// `;
 
 const Header = styled.div`
     display: flex;
