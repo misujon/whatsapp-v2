@@ -13,6 +13,7 @@ import firebase from 'firebase';
 import Message from './Message';
 import getRecipientEmail from '../utils/getRecipientEmail';
 import TimeAgo from 'timeago-react';
+import pwafire from "pwafire";
 
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
@@ -20,6 +21,7 @@ import { Picker } from 'emoji-mart'
 
 function ChatScreen({ chat, messages }) {
 
+    const pwa = pwafire.pwa;
     const [input, setInput] = useState("");
     const [user] = useAuthState(auth);
     const router = useRouter();
@@ -44,6 +46,24 @@ function ChatScreen({ chat, messages }) {
 
     const showMessages = () => {
         if (messagesSnapshot) {
+            if (messagesSnapshot?.docs?.length) {
+                let GetMessagesLengths = messagesSnapshot.docs.length;
+                let notifierData = messagesSnapshot.docs[(GetMessagesLengths - 1)].data();
+                if (notifierData.user !== user.email) {
+                    // console.log("New Notification For You");
+                    const data = {
+                                    title: "Hello Notification!",
+                                    options: {
+                                        body: "Progressive Web App Hello Notification!",
+                                        icon: "../images/icons/icon-192x192.png",
+                                        tag: "pwa",
+                                    },
+                    };
+                    
+                    pwa.Notification(data);
+                }
+            }
+                
             return [
                 messagesSnapshot.docs.map((message) => (
                     <Message
@@ -58,6 +78,7 @@ function ChatScreen({ chat, messages }) {
                 scrollToBottom()
             ]
         } else {
+                        
             return [
                 JSON.parse(messages).map((message) => (
                     <Message
