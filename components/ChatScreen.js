@@ -50,14 +50,14 @@ function ChatScreen({ chat, messages }) {
                 let GetMessagesLengths = messagesSnapshot.docs.length;
                 let notifierData = messagesSnapshot.docs[(GetMessagesLengths - 1)].data();
                 if (notifierData.user !== user.email) {
-                    // console.log("New Notification For You");
+                    // console.log(notifierData);
                     const data = {
-                                    title: "Hello Notification!",
-                                    options: {
-                                        body: "Progressive Web App Hello Notification!",
-                                        icon: "../images/icons/icon-192x192.png",
-                                        tag: "pwa",
-                                    },
+                        title: notifierData.name ? notifierData.name : notifierData.user,
+                        options: {
+                            body: notifierData.message,
+                            icon: notifierData.photoUrl,
+                            tag: "pwa",
+                        },
                     };
                     
                     pwa.Notification(data);
@@ -108,6 +108,7 @@ function ChatScreen({ chat, messages }) {
             message: input,
             user: user.email,
             photoUrl: user.photoURL,
+            name: user.displayName,
         });
 
         setInput('');
