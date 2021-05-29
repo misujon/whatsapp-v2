@@ -10,8 +10,10 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Chat from '../components/Chat';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Tooltip from '@material-ui/core/Tooltip';
+import CloseIcon from '@material-ui/icons/Close';
+import { useRouter } from 'next/router';
 
-function Sidebar() {
+function Sidebar({ statusSidebar }) {
 
     const [user] = useAuthState(auth);
 
@@ -38,6 +40,11 @@ function Sidebar() {
             (chat) =>
                 chat.data().users.find((user) => user === recipientEmail)?.length > 0
         );
+    
+    const toggleChats = false;
+    const CloseChatUsersBar = () => {
+        statusSidebar(toggleChats);
+    }
 
     return (
         <Container>
@@ -62,6 +69,15 @@ function Sidebar() {
                             <ExitToAppIcon />
                         </CustomIconButton>
                     </Tooltip>
+
+                    {useRouter().query.id ? (
+                        <Tooltip title="Close">
+                            <CustomCloseIconButton  onClick={CloseChatUsersBar}>
+                                <CloseIcon />
+                            </CustomCloseIconButton>
+                        </Tooltip>
+                    ) : ''
+                    }
                 </IconsContainer>
             </Header>
 
@@ -97,6 +113,16 @@ const Container = styled.div`
     -ms-overflow-style: none;
     scrollbar-width: none;
     background-color: #131C21;
+    display: block;
+
+    @media (max-width: 767px) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        z-index: 200;
+    }
 `;
 
 const Search = styled.div`
@@ -160,5 +186,19 @@ const CustomIconButton = styled(IconButton)`
 const CustomSearchIconButton = styled(SearchIcon)`
     &&& {
         color: whitesmoke;
+    }
+`;
+
+const CustomCloseIconButton = styled(IconButton)`
+    @media (max-width: 767px) {
+        &&& {
+            display: inline-flex!important;
+        }
+    }
+
+    display: none!important;
+
+    &&& {
+        color: red;
     }
 `;

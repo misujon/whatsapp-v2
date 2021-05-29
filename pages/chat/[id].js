@@ -5,20 +5,44 @@ import ChatScreen from '../../components/ChatScreen';
 import { auth, db } from '../../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import getRecipientEmail from '../../utils/getRecipientEmail';
+import useWindowSize from '../../utils/common';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 function Chat({ chat, messages }) {
 
+    const [SideBarStatus, setSideBarStatus] = useState(false);
     const [user] = useAuthState(auth);
+    const windowSize = useWindowSize();
+
+    const getSideBarStatus = (status) => {
+        setSideBarStatus(status);
+    }
+
+    const router = useRouter();
+    const ResponsiveSidebar = () => {
+        if (windowSize.width > 767) {
+
+            return <CustomSidebarShowDesktop />;
+
+        } else {
+
+            if (SideBarStatus && router.query.id) {
+                router.push(`/`);
+            }
+        }
+    }
 
     return (
         <Container>
             <Head>
                 <title>Chat with { getRecipientEmail(chat.users, user) }</title>
             </Head>
-            <Sidebar />
 
+            { ResponsiveSidebar() }
+            
             <ChatContainer>
-                <ChatScreen chat={chat} messages={messages} />
+                <ChatScreen chat={chat} messages={messages} statusSidebar={getSideBarStatus} />
             </ChatContainer>
         </Container>
     )
@@ -58,7 +82,13 @@ export async function getServerSideProps(context) {
     }
 }
 
+const CustomSidebarShowDesktop = styled(Sidebar)`
+    display: block;
+`;
 
+const CustomSidebarShowMobile = styled(Sidebar)`
+    display: block;
+`;
 
 const Container = styled.div`
     display: flex;

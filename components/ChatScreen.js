@@ -8,18 +8,20 @@ import AttachFileIcon from "@material-ui/icons/AttachFile";
 import { useCollection } from 'react-firebase-hooks/firestore';
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import MicIcon from "@material-ui/icons/Mic";
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import firebase from 'firebase';
 import Message from './Message';
 import getRecipientEmail from '../utils/getRecipientEmail';
 import TimeAgo from 'timeago-react';
 import pwafire from "pwafire";
+import ReactPlayer from 'react-player/lazy';
+import Tooltip from '@material-ui/core/Tooltip';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
-import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css';
+import { Picker } from 'emoji-mart';
 
-
-function ChatScreen({ chat, messages }) {
+function ChatScreen({ chat, messages, statusSidebar }) {
 
     const pwa = pwafire.pwa;
     const [input, setInput] = useState("");
@@ -33,6 +35,7 @@ function ChatScreen({ chat, messages }) {
         .doc(router.query.id)
         .collection('messages')
         .orderBy('timestamp', 'asc')
+        .limitToLast(30)
     );
 
     const scrollToBottom = () => {
@@ -50,7 +53,21 @@ function ChatScreen({ chat, messages }) {
                 let GetMessagesLengths = messagesSnapshot.docs.length;
                 let notifierData = messagesSnapshot.docs[(GetMessagesLengths - 1)].data();
                 if (notifierData.user !== user.email) {
-                    // console.log(notifierData);
+                    // console.log(Sound);
+
+                    // <Sound
+                    //     url="https://srv-store1.gofile.io/download/ns9TLD/971c29de05f43155dc6d2c303537e608/notification.mp3"
+                    //     playStatus={Sound.status.PLAYING}
+                    //     playFromPosition={300 /* in milliseconds */}
+                    //     onLoading={Sound.handleSongLoading}
+                    //     onPlaying={Sound.handleSongPlaying}
+                    //     onFinishedPlaying={Sound.handleSongFinishedPlaying}
+                    // />
+                    <ReactPlayer
+                        url='/public/notification.mp3'
+                        playing
+                    />
+
                     const data = {
                         title: notifierData.name ? notifierData.name : notifierData.user,
                         options: {
@@ -135,12 +152,20 @@ function ChatScreen({ chat, messages }) {
     const addEmojiToInput = (e) => {
         return setInput(input + e.native);
     }
-    
+
+    const OpenChatUsersBar = () => {
+        statusSidebar(true);
+    }
 
     return (
         <Container>
 
             <Header>
+                <Tooltip title="Chats">
+                    <CustomIconBackButton onClick={OpenChatUsersBar}>
+                        <KeyboardBackspaceIcon />
+                    </CustomIconBackButton>
+                </Tooltip>
                 {
                     recipient ? (
                         <Avatar src={recipient?.photoUrl} />
@@ -208,6 +233,19 @@ const Container = styled.div`
     background-size: cover;
     background-position: center;
     height: 100vh;
+`;
+
+const CustomIconBackButton = styled(IconButton)`
+    &&& {
+        display: none;
+        color: whitesmoke;
+    }
+
+    @media (max-width: 767px) {
+        &&& {
+            display: block;
+        }
+    }
 `;
 
 const Header = styled.div`
