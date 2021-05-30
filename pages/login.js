@@ -33,6 +33,8 @@ const Container = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    position: fixed;
+    width: 100%;
 `;
 
 const LoginContainer = styled.div`
@@ -43,12 +45,21 @@ const LoginContainer = styled.div`
     background-color: #17393a;
     border-radius: 5px;
     box-shadow: 0px 4px 14px -3px rgba(0, 0, 0, 0.7);
+
+    @media (max-width: 767px) {
+        padding: 50px;
+    }
 `;
 
 const Logo = styled.img`
     height: 200px;
     width: 200px;
     margin-bottom: 50px;
+
+    @media (max-width: 767px) {
+        height: 150px;
+        width: 150px;
+    }
 `;
 
 const CustomButton = styled(Button)`

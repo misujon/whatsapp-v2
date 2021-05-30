@@ -232,7 +232,7 @@ const Container = styled.div`
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    min-height: 100%;
 `;
 
 const CustomIconBackButton = styled(IconButton)`
