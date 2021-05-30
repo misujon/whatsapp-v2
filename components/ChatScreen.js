@@ -17,6 +17,8 @@ import pwafire from "pwafire";
 import ReactPlayer from 'react-player/lazy';
 import Tooltip from '@material-ui/core/Tooltip';
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import useWindowSize from '../utils/common';
+import SendIcon from '@material-ui/icons/Send';
 
 import 'emoji-mart/css/emoji-mart.css';
 import { Picker } from 'emoji-mart';
@@ -157,6 +159,20 @@ function ChatScreen({ chat, messages, statusSidebar }) {
         statusSidebar(true);
     }
 
+    const windowSize = useWindowSize();
+    const ResponsiveSubmitButton = () => {
+        if (windowSize.width > 767) {
+
+            return <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>;
+
+        } else {
+
+            return <CustomIconBackButton type="submit" onClick={sendMessage}>
+                <SendIcon />
+            </CustomIconBackButton>;
+        }
+    }
+
     return (
         <Container>
 
@@ -214,11 +230,11 @@ function ChatScreen({ chat, messages, statusSidebar }) {
 
             
             <InputContainer>
-                {emojiInput?<Picker onSelect={addEmojiToInput} />:''}
+                {/* <CustomMicIcon /> */}
+                {emojiInput ? <Picker onSelect={addEmojiToInput} /> : ''}
                 <CustomInsertEmoticonIcon onClick={CheckEmojiInput} />
                 <Input value={input} onChange={e => setInput(e.target.value)} />
-                <button hidden disabled={!input} type="submit" onClick={sendMessage}>Send</button>
-                <CustomMicIcon />
+                { ResponsiveSubmitButton() }
             </InputContainer>
             
         </Container>
@@ -305,7 +321,7 @@ const Input = styled.input`
     color: whitesmoke;
     padding: 15px 20px;
     margin-left: 15px;
-    margin-right: 15px;
+    /* margin-right: 15px; */
 `;
 
 const InputContainer = styled.form`
