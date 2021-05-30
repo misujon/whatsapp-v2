@@ -5,6 +5,7 @@ import { auth, db } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { useRouter } from 'next/router';
+import { CodeSharp } from '@material-ui/icons';
 
 function Chat({ id, users }) {
 
@@ -15,12 +16,36 @@ function Chat({ id, users }) {
         db.collection('users').where('email', '==', getRecipientEmail(users, user))
     );
     const recipient = recipientSnapshot?.docs?.[0]?.data();
+    const [lastMessage] = useCollection(
+        db.collection('chats')
+        .doc(id)
+        .collection('messages')
+        .orderBy('timestamp', 'asc')
+        .limitToLast(1)
+    );
 
     const enterChat = () => {
         router.push(`/chat/${id}`);
     }
 
     const ShowActiveChatUser = id == router.query.id ? ActiveUser : Container;
+
+    const ShowAfterNameMessage = () => {
+        let msgLast = '';
+
+        if (lastMessage?.docs?.[0]?.data()?.message) {
+
+            if (lastMessage.docs.[0].data().message.length > 30) {
+                msgLast = lastMessage?.docs?.[0]?.data()?.message.substring(0, 30)+'...';
+            } else {
+                msgLast = lastMessage?.docs?.[0]?.data()?.message;
+            }
+
+            return msgLast;
+        }
+
+        return msgLast;
+    }
 
     return (
         <ShowActiveChatUser onClick={enterChat}>
@@ -36,11 +61,13 @@ function Chat({ id, users }) {
                     <p>
                         {recipient?.name}
                         <br />
-                        <small>{recipientEmail}</small>
+                        {ShowAfterNameMessage()}
                     </p>
                 ) : (
                     <p>
                         {recipientEmail}
+                        <br />
+                        {ShowAfterNameMessage()}
                     </p>
                 )
             }

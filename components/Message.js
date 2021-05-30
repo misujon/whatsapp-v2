@@ -42,6 +42,7 @@ const MessageElement = styled.p`
 const Sender = styled(MessageElement)`
     margin-left: auto;
     background-color: #056162;
+    text-align: left;
 `;
 
 const Receiver = styled(MessageElement)`
